@@ -39,8 +39,6 @@
         </dependency>
     </dependencies>
 
-
-
     <build>
         <finalName>Module_2_2</finalName>
         <plugins>
@@ -50,7 +48,7 @@
                 <version>1.9.3.0</version>
                 <configuration>
                     <changeLogFile>src/main/resources/database/changelog.xml</changeLogFile>
-                    <driver>mysql-connector-java</driver>
+                    <driver>com.mysql.jdbc.Driver</driver>
                     <url>jdbc:mysql://localhost:3306</url>
                     <username>${database.user}</username>
                     <password>${database.password}</password>
