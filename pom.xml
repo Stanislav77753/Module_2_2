@@ -8,24 +8,6 @@
     <artifactId>module_2_2</artifactId>
     <version>1.0-SNAPSHOT</version>
 
-    <properties>
-        <liquibase.goal>update</liquibase.goal>
-    </properties>
-    <profiles>
-        <profile>
-            <id>appdb</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-            <properties>
-                <database.url>jdbc:mysql://localhost:3306</database.url>
-                <database.user>root</database.user>
-                <database.password>root</database.password>
-                <database.contexts>module_2_2_db</database.contexts>
-            </properties>
-        </profile>
-    </profiles>
-
     <dependencies>
         <dependency>
             <groupId>mysql</groupId>
@@ -35,44 +17,30 @@
         <dependency>
             <groupId>org.liquibase</groupId>
             <artifactId>liquibase-core</artifactId>
-            <version>3.6.2</version>
+            <version>3.5.5</version>
         </dependency>
     </dependencies>
 
     <build>
-        <finalName>Module_2_2</finalName>
         <plugins>
             <plugin>
                 <groupId>org.liquibase</groupId>
-                <artifactId>liquibase-plugin</artifactId>
-                <version>1.9.3.0</version>
+                <artifactId>liquibase-maven-plugin</artifactId>
+                <version>3.0.7</version>
                 <configuration>
-                    <changeLogFile>src/main/resources/database/changelog.xml</changeLogFile>
-                    <driver>com.mysql.jdbc.Driver</driver>
-                    <url>jdbc:mysql://localhost:3306</url>
-                    <username>${database.user}</username>
-                    <password>${database.password}</password>
-                    <contexts>${database.contexts}</contexts>
+                    <propertyFile>src/main/resources/database/liquibase.properties</propertyFile>
                 </configuration>
                 <executions>
                     <execution>
-                        <id>appdb</id>
                         <phase>process-resources</phase>
-                        <configuration>
-                            <contexts>${database.contexts}
-                            </contexts>
-                            <url>${database.url}</url>
-                            <username>${database.user}</username>
-                            <password>${database.password}
-                            </password>
-                        </configuration>
                         <goals>
-                            <goal>${liquibase.goal}</goal>
+                            <goal>update</goal>
                         </goals>
                     </execution>
                 </executions>
             </plugin>
         </plugins>
+        <finalName>Module_2_2</finalName>
     </build>
 
 </project>
