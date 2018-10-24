@@ -1,16 +1,111 @@
 <databaseChangeLog
-xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
-xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
     <changeSet id="1" author="Stas" runOnChange="true">
         <createTable tableName="developers">
-            <column autoIncrement="true" name="id" type="int">
+            <column  name="id" type="int" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="lname" type="varchar(50)">
+                <constraints nullable="false"/>
             </column>
             <column name="name" type="varchar(50)">
                 <constraints nullable="false"/>
             </column>
+            <column name="salary" type="int">
+                <constraints nullable="false"/>
+            </column>
         </createTable>
+
+        <createTable tableName="skills">
+            <column  name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="skill_name" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="developer_skills">
+            <column  name="developer_id" type="int"></column>
+            <column  name="skill_id" type="int"></column>
+        </createTable>
+        <addPrimaryKey tableName="developer_skills" columnNames="developer_id,skill_id"></addPrimaryKey>
+        <addForeignKeyConstraint baseTableName="developer_skills" baseColumnNames="developer_id" constraintName="fk1_developer_skills"
+                                 referencedTableName="developers"
+                                 referencedColumnNames="id"></addForeignKeyConstraint>
+        <addForeignKeyConstraint baseTableName="developer_skills" baseColumnNames="skill_id" constraintName="fk2_developer_skills"
+                                 referencedTableName="skills"
+                                 referencedColumnNames="id"></addForeignKeyConstraint>
+    </changeSet>
+
+    <changeSet id="2" author="Stas" runOnChange="true">
+        <createTable tableName="projects">
+            <column  name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="project_name" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <createTable tableName="project_developers">
+            <column  name="project_id" type="int"></column>
+            <column  name="developer_id" type="int"></column>
+        </createTable>
+        <addPrimaryKey tableName="project_developers" columnNames="project_id,developer_id"></addPrimaryKey>
+        <addForeignKeyConstraint baseTableName="project_developers" baseColumnNames="project_id" constraintName="fk1_project_developers"
+                                 referencedTableName="projects"
+                                 referencedColumnNames="id"></addForeignKeyConstraint>
+        <addForeignKeyConstraint baseTableName="project_developers" baseColumnNames="developer_id" constraintName="fk2_project_developers"
+                                 referencedTableName="developers"
+                                 referencedColumnNames="id"></addForeignKeyConstraint>
+    </changeSet>
+
+    <changeSet id="3" author="Stas" runOnChange="true">
+        <createTable tableName="companies">
+            <column  name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="company_name" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <createTable tableName="company_projects">
+            <column  name="company_id" type="int"></column>
+            <column  name="project_id" type="int"></column>
+        </createTable>
+        <addPrimaryKey tableName="company_projects" columnNames="company_id,project_id"></addPrimaryKey>
+        <addForeignKeyConstraint baseTableName="company_projects" baseColumnNames="company_id" constraintName="fk1_company_projects"
+                                 referencedTableName="companies"
+                                 referencedColumnNames="id"></addForeignKeyConstraint>
+        <addForeignKeyConstraint baseTableName="company_projects" baseColumnNames="project_id" constraintName="fk2_company_projects"
+                                 referencedTableName="projects"
+                                 referencedColumnNames="id"></addForeignKeyConstraint>
+    </changeSet>
+
+    <changeSet id="4" author="Stas" runOnChange="true">
+        <createTable tableName="customers">
+            <column  name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="customer_name" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <createTable tableName="customer_projects">
+            <column  name="customer_id" type="int"></column>
+            <column  name="project_id" type="int"></column>
+        </createTable>
+        <addPrimaryKey tableName="customer_projects" columnNames="customer_id,project_id"></addPrimaryKey>
+        <addForeignKeyConstraint baseTableName="customer_projects" baseColumnNames="customer_id" constraintName="fk1_customer_projects"
+                                 referencedTableName="customers"
+                                 referencedColumnNames="id"></addForeignKeyConstraint>
+        <addForeignKeyConstraint baseTableName="customer_projects" baseColumnNames="project_id" constraintName="fk2_customer_projects"
+                                 referencedTableName="projects"
+                                 referencedColumnNames="id"></addForeignKeyConstraint>
     </changeSet>
 </databaseChangeLog>
