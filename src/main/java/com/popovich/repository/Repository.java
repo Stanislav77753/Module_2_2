@@ -1,7 +1,7 @@
 package com.popovich.repository;
 
 import com.popovich.exceptions.EntityNotExistsException;
-import com.popovich.sqlCommands.SqlCommand;
+import com.popovich.sqlCommands.SqlGenericCommand;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -16,10 +16,11 @@ public interface Repository<T, ID> {
     void delete(T t);
     void update(T t);
     T getById(ID id) throws EntityNotExistsException;
-    default List<String> getAll(Connection connection, SqlCommand sqlCommand, String table){
+    default List<String> getAll(Connection connection, Repository repository){
+        SqlGenericCommand sqlGenericCommand = new SqlGenericCommand();
         List<String> allEntyties = new ArrayList<>();
         try(Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(sqlCommand.selectAll(table))) {
+            ResultSet resultSet = statement.executeQuery(sqlGenericCommand.selectALL(repository))) {
             while(resultSet.next()){
                 StringBuilder str = new StringBuilder();
                 for(int i = 1; i <= resultSet.getMetaData().getColumnCount(); i++){

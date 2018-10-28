@@ -3,25 +3,25 @@ package com.popovich.repository.repoImp;
 import com.popovich.exceptions.EntityNotExistsException;
 import com.popovich.model.Skill;
 import com.popovich.repository.SkillRepo;
+import com.popovich.sqlCommands.SqlGenericCommand;
 import com.popovich.util.ConnectionUtil;
-import com.popovich.sqlCommands.SqlCommand;
-import com.popovich.sqlCommands.sqlComImp.SqlComSkillImp;
-
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Arrays;
 import java.util.List;
 
 public class SkillRepoImp implements SkillRepo {
     private static Connection connection = ConnectionUtil.getInstance().getConnection();
-    private String table = "skills";
-    private SqlCommand sqlCommand = new SqlComSkillImp();
+    private static final String TABLE = "skills";
+    private static final List<String> COLUMNS_NAME = Arrays.asList("skill_name");
+    SqlGenericCommand sqlGenericCommand = new SqlGenericCommand();
 
 
     @Override
     public void save(Skill skill) {
         try(Statement statement = connection.createStatement()) {
-            statement.executeUpdate(sqlCommand.insert(table, new Skill[]{skill}));
+            statement.executeUpdate(sqlGenericCommand.insert(this, skill));
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -30,7 +30,7 @@ public class SkillRepoImp implements SkillRepo {
     @Override
     public void delete(Skill skill) {
         try(Statement statement = connection.createStatement()) {
-            statement.executeUpdate(sqlCommand.delete(table, skill));
+            statement.executeUpdate(sqlGenericCommand.delete(this, skill));
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -43,7 +43,7 @@ public class SkillRepoImp implements SkillRepo {
 
     @Override
     public Skill getById(Long id) throws EntityNotExistsException {
-        List<String> allSkills = getAll(connection, sqlCommand, table);
+        List<String> allSkills = getAll(connection, this);
         for(String skill : allSkills){
             String[] skillString = skill.split(",");
             if(new Long(skillString[0]).equals(id)){
@@ -54,7 +54,7 @@ public class SkillRepoImp implements SkillRepo {
     }
 
     public List<String> getAllSkills(){
-        return getAll(connection, sqlCommand, table);
+        return getAll(connection, this);
     }
 
 }

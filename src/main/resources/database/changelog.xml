@@ -51,6 +51,9 @@
             <column name="project_name" type="varchar(50)">
                 <constraints nullable="false"/>
             </column>
+            <column name="cost" type="int">
+                <constraints nullable="false"/>
+            </column>
         </createTable>
         <createTable tableName="project_developers">
             <column  name="project_id" type="int"></column>

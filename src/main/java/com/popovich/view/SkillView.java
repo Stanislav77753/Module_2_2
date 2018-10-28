@@ -17,7 +17,7 @@ public class SkillView {
 
     private Skill createSkill() throws EntityAlreadyExistsException {
         List<String> skills = skillController.getAllSkills();
-        Skill newSkill = new Skill(null,enterName());
+        Skill newSkill = new Skill(new Long(0),enterName());
         for(String skill: skills){
             String[] skillArr = skill.split(",");
             if(newSkill.getName().equals(skillArr[1])){

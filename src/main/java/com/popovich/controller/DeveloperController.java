@@ -17,7 +17,7 @@ public class DeveloperController {
     }
 
     public void addSkillsForDeveloper(Developer developer){
-        developerService.addSkillsForDeveloper(developer);
+        developerService.addSkillToDeveloper(developer);
     }
 
     public void changeDeveloperSalary(Developer developer){

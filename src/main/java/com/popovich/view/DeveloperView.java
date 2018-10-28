@@ -59,7 +59,7 @@ public class DeveloperView {
     }
 
     private  Developer createDeveloper(){
-        return new Developer(null, enterName("developer_name"),
+        return new Developer(new Long(0), enterName("developer_name"),
                 enterName("developer_lname"));
     }
 
@@ -82,7 +82,7 @@ public class DeveloperView {
         List<String> developers = developerController.getAllDevelopers();
         for(String dev: developers){
             String[] devArr = dev.split(",");
-            if(developer.getlName().equals(devArr[1]) && developer.getName().equals(devArr[2])){
+            if(developer.getlName().equals(devArr[2]) && developer.getName().equals(devArr[1])){
                 developer.setId(new Long(devArr[0]));
                 return true;
             }

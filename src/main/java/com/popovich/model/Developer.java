@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Developer extends NamedEntity {
-    private String lName;
-    private Integer salary = 0;
     private List<Long> skills = new ArrayList<>();
+    private Integer salary = 0;
+    private String lName;
 
     public Developer(Long id, String name, String lName) {
         super(id, name);

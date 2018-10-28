@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Project extends NamedEntity {
-    private Integer cost = 0;
     private List<Long> developers = new ArrayList<>();
+    private Integer cost = 0;
 
     public Project(Long id, String name) {
         super(id, name);

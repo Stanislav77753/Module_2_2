@@ -49,10 +49,10 @@ public class ProjectView {
                 List<String> developersFromDatabase = developerController.getAllDevelopers();
                 for(int i = 0; i < developersFromDatabase.size(); i++){
                     String[] developerString = developersFromDatabase.get(i).split(",");
-                    if(lName.equals(developerString[1]) && name.equals(developerString[2])){
+                    if(lName.equals(developerString[2]) && name.equals(developerString[1])){
                         project.addDevelopers(new Long(developerString[0]));
                         break;
-                    }else if(!lName.equals(developerString[1]) && !name.equals(developerString[2])
+                    }else if(!lName.equals(developerString[2]) && !name.equals(developerString[1])
                             && i == developersFromDatabase.size() - 1){
                         System.out.println("This developer is absent in database. At first add this skill in database");
                     }
@@ -75,7 +75,7 @@ public class ProjectView {
     }
 
     private Project createProject(){
-        return new Project(null, enterName());
+        return new Project(new Long(0), enterName());
     }
 
     private String enterName(){

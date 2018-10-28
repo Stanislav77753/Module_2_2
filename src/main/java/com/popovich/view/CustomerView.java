@@ -56,7 +56,7 @@ public class CustomerView {
     }
 
     private Customer createCustomer(){
-        return new Customer(null, enterName());
+        return new Customer(new Long(0), enterName());
     }
 
     private String enterName(){

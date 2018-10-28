@@ -3,29 +3,24 @@ package com.popovich.repository.repoImp;
 import com.popovich.exceptions.EntityNotExistsException;
 import com.popovich.model.Customer;
 import com.popovich.repository.CustomerRepo;
+import com.popovich.sqlCommands.SqlGenericCommand;
 import com.popovich.util.ConnectionUtil;
-import com.popovich.sqlCommands.SqlCommand;
-import com.popovich.sqlCommands.sqlComImp.SqlComCustomerImp;
-import com.popovich.sqlCommands.sqlComImp.SqlComManyToManyImp;
-
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Arrays;
 import java.util.List;
 
 public class CustomerRepoImp implements CustomerRepo {
     private static Connection connection = ConnectionUtil.getInstance().getConnection();
-    private String table = "customers";
-    private String customerProjectTable = "customer_projects";
-    private SqlCommand sqlCommand = new SqlComCustomerImp();
-    private SqlCommand sqlComCustomerProjects = new SqlComManyToManyImp();
+    private static final String TABLE = "customers";
+    private static final List<String> COLUMNS_NAME = Arrays.asList("customer_name");
+    SqlGenericCommand sqlGenericCommand = new SqlGenericCommand();
 
     @Override
     public void save(Customer customer) {
         try(Statement statement = connection.createStatement()) {
-            statement.executeUpdate(sqlCommand.insert(table, new Customer[]{customer}));
-            customer.setId(getCurrentId());
-            addProjectToCustomer(customer);
+            statement.executeUpdate(sqlGenericCommand.insert(this, customer));
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -34,7 +29,7 @@ public class CustomerRepoImp implements CustomerRepo {
     @Override
     public void delete(Customer customer) {
         try(Statement statement = connection.createStatement()) {
-            statement.executeUpdate(sqlCommand.delete(table, customer));
+            statement.executeUpdate(sqlGenericCommand.delete(this, customer));
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -47,7 +42,7 @@ public class CustomerRepoImp implements CustomerRepo {
 
     @Override
     public Customer getById(Long id) throws EntityNotExistsException {
-        List<String> allCustomers = getAll(connection, sqlCommand, table);
+        List<String> allCustomers = getAll(connection, this);
         for(String customer : allCustomers){
             String[] customerString = customer.split(",");
             if(new Long(customerString[0]).equals(id)){
@@ -58,25 +53,7 @@ public class CustomerRepoImp implements CustomerRepo {
     }
 
     public List<String> getAllCustomers(){
-        return getAll(connection, sqlCommand, table);
+        return getAll(connection, this);
     }
 
-    private Long getCurrentId(){
-        List<String> customers = getAllCustomers();
-        String[] cusArr = customers.get(customers.size() - 1).split(",");
-        return new Long(cusArr[0]);
-    }
-
-    public void addProjectToCustomer(Customer customer){
-        try(Statement companyProjectsStatment = connection.createStatement()) {
-            if(!customer.getProjects().isEmpty()){
-                for(Long id: customer.getProjects()){
-                    companyProjectsStatment.executeUpdate(sqlComCustomerProjects.insert(customerProjectTable,
-                            new Long[]{customer.getId(), id}));
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
 }

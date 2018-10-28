@@ -56,7 +56,7 @@ public class CompanyView {
     }
 
     private Company createCompany(){
-        return new Company(null, enterName());
+        return new Company(new Long(0), enterName());
     }
 
     private String enterName(){
